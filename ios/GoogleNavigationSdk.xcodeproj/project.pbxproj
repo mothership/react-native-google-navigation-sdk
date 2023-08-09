@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E555C0D2413F4C50049A1A2 /* GoogleNavigationSdk.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* GoogleNavigationSdk.mm */; };
-		F4FF95D7245B92E800C19C63 /*  GoogleNavigationSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /*  GoogleNavigationSdk.swift */; };
+		58EAC1B9C5D488000BE901A3 /* Pods_GoogleNavigationSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7821B3406A16D8A615F3C4B8 /* Pods_GoogleNavigationSdk.framework */; };
+		C47EDD582A83979300E3219A /* GoogleNavigationSdkViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47EDD562A83979300E3219A /* GoogleNavigationSdkViewManager.swift */; };
+		F4FF95D7245B92E800C19C63 /* GoogleNavigationSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* GoogleNavigationSdk.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,9 +26,14 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libGoogleNavigationSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGoogleNavigationSdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		31259E8350F0396586650C90 /* Pods-GoogleNavigationSdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoogleNavigationSdk.debug.xcconfig"; path = "Target Support Files/Pods-GoogleNavigationSdk/Pods-GoogleNavigationSdk.debug.xcconfig"; sourceTree = "<group>"; };
+		7821B3406A16D8A615F3C4B8 /* Pods_GoogleNavigationSdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoogleNavigationSdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3E7B5891CC2AC0600A0062D /* GoogleNavigationSdk.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleNavigationSdk.mm; sourceTree = "<group>"; };
+		C47EDD562A83979300E3219A /* GoogleNavigationSdkViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleNavigationSdkViewManager.swift; sourceTree = "<group>"; };
+		C47EDD572A83979300E3219A /* GoogleNavigationSdkViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleNavigationSdkViewManager.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* GoogleNavigationSdk-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GoogleNavigationSdk-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* GoogleNavigationSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleNavigationSdk.swift; sourceTree = "<group>"; };
+		FB489094AF43102E389E1A42 /* Pods-GoogleNavigationSdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoogleNavigationSdk.release.xcconfig"; path = "Target Support Files/Pods-GoogleNavigationSdk/Pods-GoogleNavigationSdk.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58EAC1B9C5D488000BE901A3 /* Pods_GoogleNavigationSdk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,9 +61,31 @@
 			children = (
 				F4FF95D6245B92E800C19C63 /* GoogleNavigationSdk.swift */,
 				B3E7B5891CC2AC0600A0062D /* GoogleNavigationSdk.mm */,
+				C47EDD562A83979300E3219A /* GoogleNavigationSdkViewManager.swift */,
+				C47EDD572A83979300E3219A /* GoogleNavigationSdkViewManager.m */,
 				F4FF95D5245B92E700C19C63 /* GoogleNavigationSdk-Bridging-Header.h */,
 				134814211AA4EA7D00B7C361 /* Products */,
+				D0D0C8FA07C92A954B7C51ED /* Pods */,
+				6EFC945AB2CDC811933CC849 /* Frameworks */,
 			);
+			sourceTree = "<group>";
+		};
+		6EFC945AB2CDC811933CC849 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7821B3406A16D8A615F3C4B8 /* Pods_GoogleNavigationSdk.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D0D0C8FA07C92A954B7C51ED /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				31259E8350F0396586650C90 /* Pods-GoogleNavigationSdk.debug.xcconfig */,
+				FB489094AF43102E389E1A42 /* Pods-GoogleNavigationSdk.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -66,6 +95,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "GoogleNavigationSdk" */;
 			buildPhases = (
+				BCDBAB1A4C22868A0E358969 /* [CP] Check Pods Manifest.lock */,
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
 				58B511D91A9E6C8500147676 /* CopyFiles */,
@@ -111,13 +141,38 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		BCDBAB1A4C22868A0E358969 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GoogleNavigationSdk-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		58B511D71A9E6C8500147676 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C47EDD582A83979300E3219A /* GoogleNavigationSdkViewManager.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* GoogleNavigationSdk.swift in Sources */,
-				B3E7B58A1CC2AC0600A0062D /* GoogleNavigationSdk.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +276,7 @@
 		};
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 31259E8350F0396586650C90 /* Pods-GoogleNavigationSdk.debug.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -240,6 +296,7 @@
 		};
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB489094AF43102E389E1A42 /* Pods-GoogleNavigationSdk.release.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

@@ -23,6 +23,9 @@ Pod::Spec.new do |s|
   else
   s.dependency "React-Core"
 
+  s.dependency "GoogleMaps", "8.1.0"
+  s.dependency "GoogleNavigation", "5.1.0"
+
   # Don't install the dependencies when we run `pod install` in the old architecture.
   if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
     s.compiler_flags = folly_compiler_flags + " -DRCT_NEW_ARCH_ENABLED=1"
@@ -38,5 +41,5 @@ Pod::Spec.new do |s|
     s.dependency "RCTTypeSafety"
     s.dependency "ReactCommon/turbomodule/core"
    end
-  end    
+  end
 end

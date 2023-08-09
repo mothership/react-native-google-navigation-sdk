@@ -12,7 +12,7 @@ import java.util.List;
 public class GoogleNavigationSdkPackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-    return Collections.emptyList();
+    return Arrays.<ViewManager>asList(new GoogleNavigationSdkModule(reactContext));
   }
 
   @Override

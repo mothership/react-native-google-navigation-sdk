@@ -1,0 +1,17 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '14.0'
+inhibit_all_warnings!
+
+def myPods
+
+    use_frameworks!
+
+    pod 'GoogleMaps', '8.1.0'
+    pod 'GoogleNavigation', '5.1.0'
+
+end
+
+target 'GoogleNavigationSdk' do
+    myPods
+end
