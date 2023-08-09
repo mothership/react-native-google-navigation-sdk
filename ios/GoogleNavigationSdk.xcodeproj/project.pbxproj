@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		58EAC1B9C5D488000BE901A3 /* Pods_GoogleNavigationSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7821B3406A16D8A615F3C4B8 /* Pods_GoogleNavigationSdk.framework */; };
-		C47EDD582A83979300E3219A /* GoogleNavigationSdkViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47EDD562A83979300E3219A /* GoogleNavigationSdkViewManager.swift */; };
+		C43F27CA2A83DAC2009E9E29 /* GoogleMapViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43F27C62A83DAC2009E9E29 /* GoogleMapViewManager.swift */; };
+		C43F27CB2A83DAC2009E9E29 /* GoogleNavigationViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43F27C72A83DAC2009E9E29 /* GoogleNavigationViewManager.swift */; };
 		F4FF95D7245B92E800C19C63 /* GoogleNavigationSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* GoogleNavigationSdk.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,9 +29,11 @@
 		134814201AA4EA6300B7C361 /* libGoogleNavigationSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGoogleNavigationSdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		31259E8350F0396586650C90 /* Pods-GoogleNavigationSdk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoogleNavigationSdk.debug.xcconfig"; path = "Target Support Files/Pods-GoogleNavigationSdk/Pods-GoogleNavigationSdk.debug.xcconfig"; sourceTree = "<group>"; };
 		7821B3406A16D8A615F3C4B8 /* Pods_GoogleNavigationSdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GoogleNavigationSdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E7B5891CC2AC0600A0062D /* GoogleNavigationSdk.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleNavigationSdk.mm; sourceTree = "<group>"; };
-		C47EDD562A83979300E3219A /* GoogleNavigationSdkViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleNavigationSdkViewManager.swift; sourceTree = "<group>"; };
-		C47EDD572A83979300E3219A /* GoogleNavigationSdkViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleNavigationSdkViewManager.m; sourceTree = "<group>"; };
+		C43F27C42A83DAC2009E9E29 /* GoogleNavigationViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleNavigationViewManager.m; sourceTree = "<group>"; };
+		C43F27C52A83DAC2009E9E29 /* GoogleMapViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleMapViewManager.m; sourceTree = "<group>"; };
+		C43F27C62A83DAC2009E9E29 /* GoogleMapViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapViewManager.swift; sourceTree = "<group>"; };
+		C43F27C72A83DAC2009E9E29 /* GoogleNavigationViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleNavigationViewManager.swift; sourceTree = "<group>"; };
+		C43F27CC2A83DD19009E9E29 /* GoogleNavigationSdk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleNavigationSdk.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* GoogleNavigationSdk-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GoogleNavigationSdk-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* GoogleNavigationSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleNavigationSdk.swift; sourceTree = "<group>"; };
 		FB489094AF43102E389E1A42 /* Pods-GoogleNavigationSdk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoogleNavigationSdk.release.xcconfig"; path = "Target Support Files/Pods-GoogleNavigationSdk/Pods-GoogleNavigationSdk.release.xcconfig"; sourceTree = "<group>"; };
@@ -59,11 +62,13 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				F4FF95D6245B92E800C19C63 /* GoogleNavigationSdk.swift */,
-				B3E7B5891CC2AC0600A0062D /* GoogleNavigationSdk.mm */,
-				C47EDD562A83979300E3219A /* GoogleNavigationSdkViewManager.swift */,
-				C47EDD572A83979300E3219A /* GoogleNavigationSdkViewManager.m */,
 				F4FF95D5245B92E700C19C63 /* GoogleNavigationSdk-Bridging-Header.h */,
+				C43F27CC2A83DD19009E9E29 /* GoogleNavigationSdk.m */,
+				F4FF95D6245B92E800C19C63 /* GoogleNavigationSdk.swift */,
+				C43F27C52A83DAC2009E9E29 /* GoogleMapViewManager.m */,
+				C43F27C62A83DAC2009E9E29 /* GoogleMapViewManager.swift */,
+				C43F27C42A83DAC2009E9E29 /* GoogleNavigationViewManager.m */,
+				C43F27C72A83DAC2009E9E29 /* GoogleNavigationViewManager.swift */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				D0D0C8FA07C92A954B7C51ED /* Pods */,
 				6EFC945AB2CDC811933CC849 /* Frameworks */,
@@ -84,7 +89,6 @@
 				31259E8350F0396586650C90 /* Pods-GoogleNavigationSdk.debug.xcconfig */,
 				FB489094AF43102E389E1A42 /* Pods-GoogleNavigationSdk.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -171,8 +175,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C47EDD582A83979300E3219A /* GoogleNavigationSdkViewManager.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* GoogleNavigationSdk.swift in Sources */,
+				C43F27CB2A83DAC2009E9E29 /* GoogleNavigationViewManager.swift in Sources */,
+				C43F27CA2A83DAC2009E9E29 /* GoogleMapViewManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
