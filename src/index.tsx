@@ -6,7 +6,7 @@ import {
   type ViewStyle,
   findNodeHandle,
 } from 'react-native';
-import { forwardRef, Ref, useImperativeHandle, useRef } from 'react';
+import { forwardRef, type Ref, useImperativeHandle, useRef } from 'react';
 
 const LINKING_ERROR =
   `The package 'react-native-google-navigation-sdk' doesn't seem to be linked. Make sure: \n\n` +
@@ -42,7 +42,7 @@ export interface WaypointMapPin {
 // MapView component
 
 type GoogleMapViewProps = {
-  style: ViewStyle;
+  style?: ViewStyle;
   // User interaction
   scrollEnabled?: boolean;
   // Add markers (and center map to contain all of them)
@@ -168,7 +168,7 @@ export type GoogleNavigationOnUpdateNavigationInfoEvent = {
 };
 
 type GoogleNavigationViewProps = {
-  style: ViewStyle;
+  style?: ViewStyle;
   // Locations
   from?: [number, number];
   to?: [number, number];
