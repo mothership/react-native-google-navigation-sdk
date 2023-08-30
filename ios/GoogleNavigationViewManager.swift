@@ -70,6 +70,8 @@ class GoogleNavigationView : UIView {
     var reactFromLongitude : Double = 0
     var reactToLatitude : Double = 0
     var reactToLongitude : Double = 0
+    
+    var navigationAlreadyStarted: Bool = false
 
     var gmsMapView: GMSMapView?
 
@@ -86,6 +88,11 @@ class GoogleNavigationView : UIView {
 
         self.addSubview(mapView)
 
+    }
+    
+    override func reactSetFrame(_ frame: CGRect) {
+        self.gmsMapView?.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        super.reactSetFrame(frame)
     }
 
     // Frame
@@ -144,24 +151,22 @@ class GoogleNavigationView : UIView {
     // Methods
 
     @objc func recenter() -> Void {
-        // TODO
     }
 
     @objc func setVoiceMuted(_ muted: Bool) -> Void {
-        // TODO
+        self.gmsMapView?.navigator?.voiceGuidance = muted ? .silent : .alertsAndGuidance
     }
 
     @objc func isVoiceMuted() -> Bool {
-        // TODO
-        return false
+        return self.gmsMapView?.navigator?.voiceGuidance == .silent
     }
 
     // Helpers
 
     private func startNavigationIfAllCoordinatesSet() {
         print("Lat \(self.reactFromLatitude) Lng \(self.reactFromLongitude) Lat \(self.reactToLatitude) Lng \(self.reactToLongitude)")
-        if (self.reactFromLatitude != 0 && self.reactFromLongitude != 0 && self.reactToLatitude != 0 && self.reactToLongitude != 0) {
-
+        if (!self.navigationAlreadyStarted && self.reactFromLatitude != 0 && self.reactFromLongitude != 0 && self.reactToLatitude != 0 && self.reactToLongitude != 0) {
+            self.navigationAlreadyStarted = true
 
             let camera = GMSCameraPosition.camera(withLatitude: reactFromLatitude, longitude: reactFromLongitude, zoom: 14)
             self.gmsMapView?.camera = camera
@@ -170,8 +175,22 @@ class GoogleNavigationView : UIView {
                     if termsAccepted {
                         // Enable navigation if the user accepts the terms.
                         self.gmsMapView?.isNavigationEnabled = true
-                        self.gmsMapView?.settings.compassButton = true
                         self.gmsMapView?.travelMode = .driving
+                        self.gmsMapView?.shouldDisplaySpeedometer = true
+                        
+                        // UI Settings
+                        self.gmsMapView?.settings.compassButton = true
+                        self.gmsMapView?.settings.navigationHeaderPrimaryBackgroundColor = UIColor.black
+                        self.gmsMapView?.settings.navigationHeaderSecondaryBackgroundColor = UIColor.black
+                        self.gmsMapView?.settings.isNavigationFooterEnabled = false
+                        self.gmsMapView?.settings.showsTrafficLights = true
+                        self.gmsMapView?.settings.showsStopSigns = true
+                        
+                        // Navigator listener
+                        self.gmsMapView?.navigator?.timeUpdateThreshold = 10
+                        self.gmsMapView?.navigator?.distanceUpdateThreshold = 100
+                        self.gmsMapView?.navigator?.add(self)
+                        
 
                         var destinations = [GMSNavigationWaypoint]()
 //                        destinations.append(GMSNavigationWaypoint(location: CLLocationCoordinate2D(latitude: self.reactFromLatitude, longitude: self.reactFromLongitude), title: "")!)
@@ -187,5 +206,26 @@ class GoogleNavigationView : UIView {
                     }
                 }
         }
+    }
+}
+
+extension GoogleNavigationView: GMSNavigatorListener {
+    
+    func navigator(_ navigator: GMSNavigator, didArriveAt waypoint: GMSNavigationWaypoint) {
+        self.reactOnDidArrive?(nil)
+    }
+    
+    func navigator(_ navigator: GMSNavigator, didUpdate navInfo: GMSNavigationNavInfo) {
+        self.reactOnUpdateNavigationInfo?([
+            "distanceRemaining": navInfo.distanceToFinalDestinationMeters,
+            "durationRemaining": navInfo.timeToFinalDestinationSeconds,
+        ])
+    }
+    
+    // Define a listener for suggested changes to lighting mode.
+    func navigator(_ navigator: GMSNavigator, didChangeSuggestedLightingMode lightingMode:
+        GMSNavigationLightingMode) {
+        // Make the suggested change.
+        self.gmsMapView?.lightingMode = lightingMode
     }
 }
