@@ -8,6 +8,5 @@ class GoogleNavigationSdk: NSObject {
     func provideAPIKey(apiKey: String, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
         GMSServices.provideAPIKey(apiKey)
         resolve(nil)
-
     }
 }

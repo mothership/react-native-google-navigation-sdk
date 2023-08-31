@@ -11,7 +11,7 @@ class GoogleNavigationViewManager: RCTViewManager {
     }
 
     func defaultFrame() -> CGRect {
-        return UIScreen.main.bounds
+        return CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 70)
     }
 
     override func view() -> (GoogleNavigationView) {
@@ -85,6 +85,7 @@ class GoogleNavigationView : UIView {
 
         let mapView = GMSMapView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         self.gmsMapView = mapView
+        mapView.delegate = self
 
         self.addSubview(mapView)
 
@@ -151,6 +152,13 @@ class GoogleNavigationView : UIView {
     // Methods
 
     @objc func recenter() -> Void {
+        if self.gmsMapView?.navigator?.isGuidanceActive == true {
+            self.gmsMapView?.cameraMode = .following
+        }
+        
+        self.reactOnShowResumeButton?([
+            "showResumeButton": false
+        ])
     }
 
     @objc func setVoiceMuted(_ muted: Bool) -> Void {
@@ -175,31 +183,59 @@ class GoogleNavigationView : UIView {
                     if termsAccepted {
                         // Enable navigation if the user accepts the terms.
                         self.gmsMapView?.isNavigationEnabled = true
+                        self.gmsMapView?.isTrafficEnabled = true
+                        self.gmsMapView?.shouldDisplaySpeedLimit = true
                         self.gmsMapView?.travelMode = .driving
                         self.gmsMapView?.shouldDisplaySpeedometer = true
                         
                         // UI Settings
                         self.gmsMapView?.settings.compassButton = true
+                        self.gmsMapView?.settings.isRecenterButtonEnabled = false
+                        self.gmsMapView?.settings.isNavigationTripProgressBarEnabled = true
                         self.gmsMapView?.settings.navigationHeaderPrimaryBackgroundColor = UIColor.black
                         self.gmsMapView?.settings.navigationHeaderSecondaryBackgroundColor = UIColor.black
                         self.gmsMapView?.settings.isNavigationFooterEnabled = false
                         self.gmsMapView?.settings.showsTrafficLights = true
                         self.gmsMapView?.settings.showsStopSigns = true
-                        
+
+                        // Configure SpeedAlertOptions
+                        let minorSpeedAlertThresholdPercentage: CGFloat = 0.05
+                        let majorSpeedAlertThresholdPercentage: CGFloat = 0.1
+                        let severityUpgradeDurationSeconds: TimeInterval = 5
+                        let mutableSpeedAlertOptions: GMSNavigationMutableSpeedAlertOptions  = GMSNavigationMutableSpeedAlertOptions()
+                        mutableSpeedAlertOptions.setSpeedAlertThresholdPercentage(minorSpeedAlertThresholdPercentage, for: .minor)
+                        mutableSpeedAlertOptions.setSpeedAlertThresholdPercentage(majorSpeedAlertThresholdPercentage, for: .major)
+                        mutableSpeedAlertOptions.severityUpgradeDurationSeconds = severityUpgradeDurationSeconds
+                        // Set SpeedAlertOptions to Navigator
+                        self.gmsMapView?.navigator?.speedAlertOptions = mutableSpeedAlertOptions
+
                         // Navigator listener
                         self.gmsMapView?.navigator?.timeUpdateThreshold = 10
                         self.gmsMapView?.navigator?.distanceUpdateThreshold = 100
                         self.gmsMapView?.navigator?.add(self)
                         
+                        // Set the last digit of the car's license plate to get route restrictions
+                        // in supported countries. (optional)
+//                        self.gmsMapView?.navigator?.licensePlateRestriction = GMSNavigationLicensePlateRestriction(licensePlateLastDigit: 12, countryCode: "US")
+                        
 
+                        // Setup destination
                         var destinations = [GMSNavigationWaypoint]()
-//                        destinations.append(GMSNavigationWaypoint(location: CLLocationCoordinate2D(latitude: self.reactFromLatitude, longitude: self.reactFromLongitude), title: "")!)
                         destinations.append(GMSNavigationWaypoint(location: CLLocationCoordinate2D(latitude: self.reactToLatitude, longitude: self.reactToLongitude), title: "")!)
 
+                        // Start navigation
                         self.gmsMapView?.navigator?.setDestinations(destinations) { routeStatus in
-                            self.gmsMapView?.navigator?.isGuidanceActive = true
-                            self.gmsMapView?.locationSimulator?.simulateLocationsAlongExistingRoute()
-                            self.gmsMapView?.cameraMode = .following
+                            switch routeStatus {
+                            case .OK:
+                                self.gmsMapView?.navigator?.isGuidanceActive = true
+                                self.gmsMapView?.locationSimulator?.simulateLocationsAlongExistingRoute()
+                                self.gmsMapView?.cameraMode = .following
+                                break
+                            default:
+                                //error
+                                break
+                            }
+                            
                         }
                     } else {
                         // Handle the case when the user rejects the terms and conditions.
@@ -223,9 +259,21 @@ extension GoogleNavigationView: GMSNavigatorListener {
     }
     
     // Define a listener for suggested changes to lighting mode.
-    func navigator(_ navigator: GMSNavigator, didChangeSuggestedLightingMode lightingMode:
-        GMSNavigationLightingMode) {
-        // Make the suggested change.
-        self.gmsMapView?.lightingMode = lightingMode
+//    func navigator(_ navigator: GMSNavigator, didChangeSuggestedLightingMode lightingMode:
+//        GMSNavigationLightingMode) {
+//        // Make the suggested change.
+//        self.gmsMapView?.lightingMode = lightingMode
+//    }
+}
+
+extension GoogleNavigationView: GMSMapViewDelegate {
+    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        if mapView.navigator?.isGuidanceActive == false { return }
+        if !gesture { return }
+        
+        self.reactOnShowResumeButton?([
+            "showResumeButton": true
+        ])
+        
     }
 }

@@ -31,130 +31,130 @@ export function provideGoogleNavigationAPIKey(apiKey: string): Promise<void> {
   return GoogleNavigationSdk.provideAPIKey(apiKey);
 }
 
-// Markers
-
-export interface WaypointMapPin {
-  coordinate: [number, number];
-  stopNumber: number;
-  style: 'complete' | 'issue' | 'next' | 'first';
-}
-
-// MapView component
-
-type GoogleMapViewProps = {
-  style?: ViewStyle;
-  // User interaction
-  scrollEnabled?: boolean;
-  // Add markers (and center map to contain all of them)
-  includeUserLocationInMapBounds?: boolean;
-  initialUserLocation?: [number, number];
-  markers?: Array<WaypointMapPin>;
-  // Padding
-  markersPaddingTop?: number;
-  markersPaddingBottom?: number;
-  markersPaddingLeft?: number;
-  markersPaddingRight?: number;
-  // Set map center manually (overriding markers bounds)
-  center?: [number, number];
-  zoom?: number;
-  // Lines
-  polyline?: string;
-  /** Whether markers should be connected by a straight line */
-  connectMarkers?: boolean;
-  // Callbacks
-  onCenterChange?: () => void;
-  onBearingChange?: () => void;
-};
-
-const GoogleMapComponentName = 'GoogleMapView';
-
-const GoogleMapView =
-  UIManager.getViewManagerConfig(GoogleMapComponentName) != null
-    ? requireNativeComponent<GoogleMapViewProps>(GoogleMapComponentName)
-    : () => {
-        throw new Error(LINKING_ERROR);
-      };
-
-export interface MapViewRefType {
-  updateCamera: (animated?: boolean) => void;
-  updateBearing: () => void;
-}
-
-export const MapView = forwardRef(
-  (props: GoogleMapViewProps, ref: Ref<MapViewRefType>): JSX.Element => {
-    // Refs
-    const viewRef = useRef(null);
-
-    useImperativeHandle(ref, () => ({ updateCamera, updateBearing }));
-
-    const _onCenterChange = (_: { nativeEvent: {} }) => {
-      if (!props.onCenterChange) {
-        return;
-      }
-      // process raw event...
-      props.onCenterChange();
-    };
-
-    const _onBearingChange = (_: { nativeEvent: {} }) => {
-      if (!props.onBearingChange) {
-        return;
-      }
-      // process raw event...
-      props.onBearingChange();
-    };
-
-    // Exposed public functions
-    const updateCamera = (animated?: boolean): void => {
-      NativeModules.GoogleMapView.updateCamera(
-        findNodeHandle(viewRef.current),
-        animated === undefined ? true : animated
-      );
-    };
-    const updateBearing = (): void => {
-      NativeModules.GoogleMapView.updateBearing(
-        findNodeHandle(viewRef.current)
-      );
-    };
-
-    return (
-      // @ts-ignore
-      <GoogleMapView
-        ref={viewRef}
-        style={props.style}
-        scrollEnabled={
-          props.scrollEnabled === undefined ? true : props.scrollEnabled
-        }
-        includeUserLocationInMapBounds={
-          props.includeUserLocationInMapBounds === undefined
-            ? false
-            : props.includeUserLocationInMapBounds
-        }
-        initialUserLocationLatitude={
-          props.initialUserLocation ? props.initialUserLocation[0] : 0
-        }
-        initialUserLocationLongitude={
-          props.initialUserLocation ? props.initialUserLocation[1] : 0
-        }
-        markers={props.markers}
-        markersPaddingTop={props.markersPaddingTop ?? 0}
-        markersPaddingBottom={props.markersPaddingBottom ?? 0}
-        markersPaddingLeft={props.markersPaddingLeft ?? 0}
-        markersPaddingRight={props.markersPaddingRight ?? 0}
-        zoom={props.zoom ? props.zoom : 0}
-        centerLatitude={props.center ? props.center[0] : 0}
-        centerLongitude={props.center ? props.center[1] : 0}
-        polyline={props.polyline}
-        connectMarkers={
-          props.connectMarkers === undefined ? false : props.connectMarkers
-        }
-        // @ts-ignore
-        onCenterChange={_onCenterChange}
-        // @ts-ignore
-        onBearingChange={_onBearingChange}
-      />
-    );
-  }
-);
+// // Markers
+//
+// export interface WaypointMapPin {
+//   coordinate: [number, number];
+//   stopNumber: number;
+//   style: 'complete' | 'issue' | 'next' | 'first';
+// }
+//
+// // MapView component
+//
+// type GoogleMapViewProps = {
+//   style?: ViewStyle;
+//   // User interaction
+//   scrollEnabled?: boolean;
+//   // Add markers (and center map to contain all of them)
+//   includeUserLocationInMapBounds?: boolean;
+//   initialUserLocation?: [number, number];
+//   markers?: Array<WaypointMapPin>;
+//   // Padding
+//   markersPaddingTop?: number;
+//   markersPaddingBottom?: number;
+//   markersPaddingLeft?: number;
+//   markersPaddingRight?: number;
+//   // Set map center manually (overriding markers bounds)
+//   center?: [number, number];
+//   zoom?: number;
+//   // Lines
+//   polyline?: string;
+//   /** Whether markers should be connected by a straight line */
+//   connectMarkers?: boolean;
+//   // Callbacks
+//   onCenterChange?: () => void;
+//   onBearingChange?: () => void;
+// };
+//
+// const GoogleMapComponentName = 'GoogleMapView';
+//
+// const GoogleMapView =
+//   UIManager.getViewManagerConfig(GoogleMapComponentName) != null
+//     ? requireNativeComponent<GoogleMapViewProps>(GoogleMapComponentName)
+//     : () => {
+//         throw new Error(LINKING_ERROR);
+//       };
+//
+// export interface MapViewRefType {
+//   updateCamera: (animated?: boolean) => void;
+//   updateBearing: () => void;
+// }
+//
+// export const MapView = forwardRef(
+//   (props: GoogleMapViewProps, ref: Ref<MapViewRefType>): JSX.Element => {
+//     // Refs
+//     const viewRef = useRef(null);
+//
+//     useImperativeHandle(ref, () => ({ updateCamera, updateBearing }));
+//
+//     const _onCenterChange = (_: { nativeEvent: {} }) => {
+//       if (!props.onCenterChange) {
+//         return;
+//       }
+//       // process raw event...
+//       props.onCenterChange();
+//     };
+//
+//     const _onBearingChange = (_: { nativeEvent: {} }) => {
+//       if (!props.onBearingChange) {
+//         return;
+//       }
+//       // process raw event...
+//       props.onBearingChange();
+//     };
+//
+//     // Exposed public functions
+//     const updateCamera = (animated?: boolean): void => {
+//       NativeModules.GoogleMapView.updateCamera(
+//         findNodeHandle(viewRef.current),
+//         animated === undefined ? true : animated
+//       );
+//     };
+//     const updateBearing = (): void => {
+//       NativeModules.GoogleMapView.updateBearing(
+//         findNodeHandle(viewRef.current)
+//       );
+//     };
+//
+//     return (
+//       // @ts-ignore
+//       <GoogleMapView
+//         ref={viewRef}
+//         style={props.style}
+//         scrollEnabled={
+//           props.scrollEnabled === undefined ? true : props.scrollEnabled
+//         }
+//         includeUserLocationInMapBounds={
+//           props.includeUserLocationInMapBounds === undefined
+//             ? false
+//             : props.includeUserLocationInMapBounds
+//         }
+//         initialUserLocationLatitude={
+//           props.initialUserLocation ? props.initialUserLocation[0] : 0
+//         }
+//         initialUserLocationLongitude={
+//           props.initialUserLocation ? props.initialUserLocation[1] : 0
+//         }
+//         markers={props.markers}
+//         markersPaddingTop={props.markersPaddingTop ?? 0}
+//         markersPaddingBottom={props.markersPaddingBottom ?? 0}
+//         markersPaddingLeft={props.markersPaddingLeft ?? 0}
+//         markersPaddingRight={props.markersPaddingRight ?? 0}
+//         zoom={props.zoom ? props.zoom : 0}
+//         centerLatitude={props.center ? props.center[0] : 0}
+//         centerLongitude={props.center ? props.center[1] : 0}
+//         polyline={props.polyline}
+//         connectMarkers={
+//           props.connectMarkers === undefined ? false : props.connectMarkers
+//         }
+//         // @ts-ignore
+//         onCenterChange={_onCenterChange}
+//         // @ts-ignore
+//         onBearingChange={_onBearingChange}
+//       />
+//     );
+//   }
+// );
 
 // NavigationView component
 
@@ -241,13 +241,13 @@ export const NavigationView = forwardRef(
 
     // Exposed public functions
     const setVoiceMuted = (muted: boolean): void => {
-      NativeModules.GoogleMapView.setVoiceMuted(
+      NativeModules.GoogleNavigationView.setVoiceMuted(
         findNodeHandle(viewRef.current),
         muted
       );
     };
     const recenter = (): void => {
-      NativeModules.GoogleMapView.recenter(findNodeHandle(viewRef.current));
+      NativeModules.GoogleNavigationView.recenter(findNodeHandle(viewRef.current));
     };
     const isVoiceMuted = (): Promise<{ isVoiceMuted: boolean }> => {
       return NativeModules.GoogleNavigationView.isVoiceMuted(

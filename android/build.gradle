@@ -89,12 +89,13 @@ dependencies {
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
+  implementation "com.google.android.libraries.navigation:navigation:4.99.0"
 }
 
 if (isNewArchitectureEnabled()) {
   react {
     jsRootDir = file("../src/")
-    libraryName = "GoogleNavigationSdkView"
+    libraryName = "GoogleNavigationSdk"
     codegenJavaPackageName = "com.googlenavigationsdk"
   }
 }

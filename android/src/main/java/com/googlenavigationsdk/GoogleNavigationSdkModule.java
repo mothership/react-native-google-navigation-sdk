@@ -22,11 +22,9 @@ public class GoogleNavigationSdkModule extends ReactContextBaseJavaModule {
     return NAME;
   }
 
-
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
   @ReactMethod
-  public void multiply(double a, double b, Promise promise) {
-    promise.resolve(a * b);
+  public void provideAPIKey(String apiKey, Promise promise) {
+    // Nothing to do for Android, this method was just for iOS
+    promise.resolve(null);
   }
 }
