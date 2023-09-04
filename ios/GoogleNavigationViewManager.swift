@@ -11,7 +11,7 @@ class GoogleNavigationViewManager: RCTViewManager {
     }
 
     func defaultFrame() -> CGRect {
-        return CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 70)
+        return UIScreen.main.bounds
     }
 
     override func view() -> (GoogleNavigationView) {
@@ -70,7 +70,7 @@ class GoogleNavigationView : UIView {
     var reactFromLongitude : Double = 0
     var reactToLatitude : Double = 0
     var reactToLongitude : Double = 0
-    
+
     var navigationAlreadyStarted: Bool = false
 
     var gmsMapView: GMSMapView?
@@ -90,7 +90,7 @@ class GoogleNavigationView : UIView {
         self.addSubview(mapView)
 
     }
-    
+
     override func reactSetFrame(_ frame: CGRect) {
         self.gmsMapView?.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         super.reactSetFrame(frame)
@@ -155,7 +155,7 @@ class GoogleNavigationView : UIView {
         if self.gmsMapView?.navigator?.isGuidanceActive == true {
             self.gmsMapView?.cameraMode = .following
         }
-        
+
         self.reactOnShowResumeButton?([
             "showResumeButton": false
         ])
@@ -187,7 +187,7 @@ class GoogleNavigationView : UIView {
                         self.gmsMapView?.shouldDisplaySpeedLimit = true
                         self.gmsMapView?.travelMode = .driving
                         self.gmsMapView?.shouldDisplaySpeedometer = true
-                        
+
                         // UI Settings
                         self.gmsMapView?.settings.compassButton = true
                         self.gmsMapView?.settings.isRecenterButtonEnabled = false
@@ -213,11 +213,11 @@ class GoogleNavigationView : UIView {
                         self.gmsMapView?.navigator?.timeUpdateThreshold = 10
                         self.gmsMapView?.navigator?.distanceUpdateThreshold = 100
                         self.gmsMapView?.navigator?.add(self)
-                        
+
                         // Set the last digit of the car's license plate to get route restrictions
                         // in supported countries. (optional)
 //                        self.gmsMapView?.navigator?.licensePlateRestriction = GMSNavigationLicensePlateRestriction(licensePlateLastDigit: 12, countryCode: "US")
-                        
+
 
                         // Setup destination
                         var destinations = [GMSNavigationWaypoint]()
@@ -235,7 +235,7 @@ class GoogleNavigationView : UIView {
                                 //error
                                 break
                             }
-                            
+
                         }
                     } else {
                         // Handle the case when the user rejects the terms and conditions.
@@ -246,18 +246,18 @@ class GoogleNavigationView : UIView {
 }
 
 extension GoogleNavigationView: GMSNavigatorListener {
-    
+
     func navigator(_ navigator: GMSNavigator, didArriveAt waypoint: GMSNavigationWaypoint) {
         self.reactOnDidArrive?(nil)
     }
-    
+
     func navigator(_ navigator: GMSNavigator, didUpdate navInfo: GMSNavigationNavInfo) {
         self.reactOnUpdateNavigationInfo?([
             "distanceRemaining": navInfo.distanceToFinalDestinationMeters,
             "durationRemaining": navInfo.timeToFinalDestinationSeconds,
         ])
     }
-    
+
     // Define a listener for suggested changes to lighting mode.
 //    func navigator(_ navigator: GMSNavigator, didChangeSuggestedLightingMode lightingMode:
 //        GMSNavigationLightingMode) {
@@ -270,10 +270,10 @@ extension GoogleNavigationView: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
         if mapView.navigator?.isGuidanceActive == false { return }
         if !gesture { return }
-        
+
         self.reactOnShowResumeButton?([
             "showResumeButton": true
         ])
-        
+
     }
 }

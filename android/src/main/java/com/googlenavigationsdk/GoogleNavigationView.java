@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +20,10 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.bridge.Arguments;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.FollowMyLocationOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.libraries.navigation.ArrivalEvent;
 import com.google.android.libraries.navigation.DisplayOptions;
@@ -36,6 +41,7 @@ import com.google.android.libraries.navigation.Waypoint;
 public class GoogleNavigationView extends FrameLayout {
 
   private NavigationView navigationView = null;
+  private GoogleMap mGoogleMap;
   private Navigator mNavigator = null;
   private RoutingOptions mRoutingOptions = null;
   private DisplayOptions mDisplayOptions = null;
@@ -44,6 +50,7 @@ public class GoogleNavigationView extends FrameLayout {
   private double fromLongitude = 0;
   private double toLatitude = 0;
   private double toLongitude = 0;
+  private boolean navigationAlreadyAdded = false;
   private boolean navigationAlreadyStarted = false;
   private int audioGuidance = Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE;
   private Navigator.RemainingTimeOrDistanceChangedListener remainingTimeOrDistanceChangedListener = null;
@@ -56,11 +63,11 @@ public class GoogleNavigationView extends FrameLayout {
   public GoogleNavigationView(@NonNull ReactContext reactContext) {
     super(reactContext);
     mReactContext = reactContext;
-
     addSubview(reactContext);
   }
 
   private void addSubview(Context context) {
+    Log.i("GOOGLENAVIGATIONVIEW", "addSubview");
     navigationView = new NavigationView(context);
     addView(navigationView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     navigationView.onCreate(null);
@@ -68,22 +75,18 @@ public class GoogleNavigationView extends FrameLayout {
 
   public void setFromLatitude(double fromLatitude) {
     this.fromLatitude = fromLatitude;
-    startNavigationIfAllCoordinatesSet();
   }
 
   public void setFromLongitude(double fromLongitude) {
     this.fromLongitude = fromLongitude;
-    startNavigationIfAllCoordinatesSet();
   }
 
   public void setToLatitude(double toLatitude) {
     this.toLatitude = toLatitude;
-    startNavigationIfAllCoordinatesSet();
   }
 
   public void setToLongitude(double toLongitude) {
     this.toLongitude = toLongitude;
-    startNavigationIfAllCoordinatesSet();
   }
 
   public void setVoiceMuted(boolean voiceMuted) {
@@ -102,14 +105,19 @@ public class GoogleNavigationView extends FrameLayout {
   }
 
   public void recenter() {
-    // TODO
+    if (mGoogleMap != null) {
+      mGoogleMap.followMyLocation(GoogleMap.CameraPerspective.TILTED);
+      sendShowResumeButton(false);
+    }
   }
-
 
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
 
+    Log.i("GOOGLENAVIGATIONVIEW", "onDetachedFromWindow");
+
+    navigationView.onStop();
     navigationView.onDestroy();
 
     if (mNavigator != null) {
@@ -131,7 +139,18 @@ public class GoogleNavigationView extends FrameLayout {
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
 
+    Log.i("GOOGLENAVIGATIONVIEW", "onAttachedToWindow");
+
+    navigationView.onStart();
     startNavigationIfAllCoordinatesSet();
+  }
+
+  private void sendShowResumeButton(boolean showResumeButton) {
+      WritableMap event = Arguments.createMap();
+      event.putBoolean("showResumeButton", showResumeButton);
+      mReactContext
+              .getJSModule(RCTEventEmitter.class)
+              .receiveEvent(getId(), "showResumeButton", event);
   }
 
   private void sendArrivalEvent() {
@@ -162,16 +181,13 @@ public class GoogleNavigationView extends FrameLayout {
 
     navigationAlreadyStarted = true;
 
-    navigationView.setNavigationUiEnabled(true);
-    navigationView.setHeaderEnabled(true);
-    navigationView.setEtaCardEnabled(true);
-
     NavigationApi.getNavigator(activity, new NavigationApi.NavigatorListener() {
       /**
        * Sets up the navigation UI when the navigator is ready for use.
        */
       @Override
       public void onNavigatorReady(Navigator navigator) {
+        Log.i("GOOGLENAVIGATIONVIEW", "onNavigatorReady");
         mNavigator = navigator;
 
         // Follow user
@@ -179,24 +195,37 @@ public class GoogleNavigationView extends FrameLayout {
           @SuppressLint("MissingPermission")
           @Override
           public void onMapReady(GoogleMap googleMap) {
-            googleMap.followMyLocation(GoogleMap.CameraPerspective.TILTED);
+            Log.i("GOOGLENAVIGATIONVIEW", "onMapReady");
+            mGoogleMap = googleMap;
             googleMap.setTrafficEnabled(true);
+            googleMap.followMyLocation(GoogleMap.CameraPerspective.TILTED);
+            googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+                @Override
+                public void onCameraMoveStarted(int reason) {
+                    if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                        sendShowResumeButton(true);
+                    }
+                }
+            });
           }
         });
 
         // UI settings
-        navigationView.setRecenterButtonEnabled(true);
-        navigationView.setSpeedLimitIconEnabled(true);
+        navigationView.setNavigationUiEnabled(true);
+        navigationView.setHeaderEnabled(true);
+        navigationView.setEtaCardEnabled(false);
+        navigationView.setRecenterButtonEnabled(false);
+        navigationView.setSpeedLimitIconEnabled(false);
         navigationView.setSpeedometerEnabled(true);
         navigationView.setTripProgressBarEnabled(true);
 //        navigationView.setTrafficIncidentCardsEnabled(true);
 //        navigationView.setTrafficPromptsEnabled(true);
         navigationView.setForceNightMode(ForceNightMode.FORCE_DAY);
-//        navigationView.setStylingOptions(new StylingOptions()
-//          .primaryDayModeThemeColor(BLACK_COLOR)
-//          .primaryNightModeThemeColor(BLACK_COLOR)
-//          .secondaryDayModeThemeColor(BLACK_COLOR)
-//          .secondaryNightModeThemeColor(BLACK_COLOR));
+       navigationView.setStylingOptions(new StylingOptions()
+         .primaryDayModeThemeColor(BLACK_COLOR)
+         .primaryNightModeThemeColor(BLACK_COLOR)
+         .secondaryDayModeThemeColor(BLACK_COLOR)
+         .secondaryNightModeThemeColor(BLACK_COLOR));
 
         // Setup SpeedAlertOptions
         mNavigator.setSpeedAlertOptions(new SpeedAlertOptions.Builder()
@@ -216,13 +245,15 @@ public class GoogleNavigationView extends FrameLayout {
         arrivalListener = new Navigator.ArrivalListener() {
           @Override
           public void onArrival(ArrivalEvent arrivalEvent) {
-             mNavigator.stopGuidance();
+            if (arrivalEvent.isFinalDestination()) {
+              mNavigator.stopGuidance();
 
-            // Stop simulating vehicle movement.
-            mNavigator.getSimulator().unsetUserLocation();
+              // Stop simulating vehicle movement.
+              mNavigator.getSimulator().unsetUserLocation();
 
-            // send event
-            sendArrivalEvent();
+              // send event
+              sendArrivalEvent();
+            }
           }
         };
         mNavigator.addArrivalListener(arrivalListener);
@@ -234,25 +265,27 @@ public class GoogleNavigationView extends FrameLayout {
 
         // Set the travel mode (DRIVING, WALKING, CYCLING, TWO_WHEELER, or TAXI).
         mRoutingOptions =  new RoutingOptions();
-        mRoutingOptions.travelMode(RoutingOptions.TravelMode.DRIVING);
+        mRoutingOptions = mRoutingOptions.travelMode(RoutingOptions.TravelMode.DRIVING);
 
         mDisplayOptions =
           new DisplayOptions().showTrafficLights(true).showStopSigns(true);
 
         // Navigate to the location
         ListenableResultFuture<Navigator.RouteStatus> result = mNavigator.setDestination(Waypoint.builder().setLatLng(
-          38.064465, -1.054215 // TODO toLatitude, toLongitude
+          38.101994, -1.232072 // TODO toLatitude, toLongitude
         ).build(), mRoutingOptions, mDisplayOptions);
         result.setOnResultListener(new ListenableResultFuture.OnResultListener<Navigator.RouteStatus>() {
           @Override
           public void onResult(Navigator.RouteStatus routeStatus) {
             if (routeStatus == Navigator.RouteStatus.OK) {
               // Audio guidance
+              Log.i("GOOGLENAVIGATIONVIEW", "setDestination onResult OK");
+
               mNavigator.setAudioGuidance(Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE);
 
-              mNavigator.startGuidance();
-
               mNavigator.getSimulator().simulateLocationsAlongExistingRoute();
+
+              mNavigator.startGuidance();
             }
           }
         });
