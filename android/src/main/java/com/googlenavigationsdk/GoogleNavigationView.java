@@ -67,7 +67,6 @@ public class GoogleNavigationView extends FrameLayout {
   }
 
   private void addSubview(Context context) {
-    Log.i("GOOGLENAVIGATIONVIEW", "addSubview");
     navigationView = new NavigationView(context);
     addView(navigationView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     navigationView.onCreate(null);
@@ -115,8 +114,6 @@ public class GoogleNavigationView extends FrameLayout {
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
 
-    Log.i("GOOGLENAVIGATIONVIEW", "onDetachedFromWindow");
-
     navigationView.onStop();
     navigationView.onDestroy();
 
@@ -138,8 +135,6 @@ public class GoogleNavigationView extends FrameLayout {
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-
-    Log.i("GOOGLENAVIGATIONVIEW", "onAttachedToWindow");
 
     navigationView.onStart();
     startNavigationIfAllCoordinatesSet();
@@ -187,7 +182,6 @@ public class GoogleNavigationView extends FrameLayout {
        */
       @Override
       public void onNavigatorReady(Navigator navigator) {
-        Log.i("GOOGLENAVIGATIONVIEW", "onNavigatorReady");
         mNavigator = navigator;
 
         // Follow user
@@ -195,7 +189,6 @@ public class GoogleNavigationView extends FrameLayout {
           @SuppressLint("MissingPermission")
           @Override
           public void onMapReady(GoogleMap googleMap) {
-            Log.i("GOOGLENAVIGATIONVIEW", "onMapReady");
             mGoogleMap = googleMap;
             googleMap.setTrafficEnabled(true);
             googleMap.followMyLocation(GoogleMap.CameraPerspective.TILTED);
@@ -279,8 +272,6 @@ public class GoogleNavigationView extends FrameLayout {
           public void onResult(Navigator.RouteStatus routeStatus) {
             if (routeStatus == Navigator.RouteStatus.OK) {
               // Audio guidance
-              Log.i("GOOGLENAVIGATIONVIEW", "setDestination onResult OK");
-
               mNavigator.setAudioGuidance(Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE);
 
               mNavigator.getSimulator().simulateLocationsAlongExistingRoute();
