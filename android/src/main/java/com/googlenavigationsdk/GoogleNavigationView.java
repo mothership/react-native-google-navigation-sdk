@@ -97,7 +97,7 @@ public class GoogleNavigationView extends FrameLayout {
 
   public boolean isVoiceMuted() {
     if (mNavigator != null) {
-      // TODO
+      // TODO not able to get current setting
       return false;
     }
     return false;
@@ -265,7 +265,7 @@ public class GoogleNavigationView extends FrameLayout {
 
         // Navigate to the location
         ListenableResultFuture<Navigator.RouteStatus> result = mNavigator.setDestination(Waypoint.builder().setLatLng(
-          38.101994, -1.232072 // TODO toLatitude, toLongitude
+          toLatitude, toLongitude
         ).build(), mRoutingOptions, mDisplayOptions);
         result.setOnResultListener(new ListenableResultFuture.OnResultListener<Navigator.RouteStatus>() {
           @Override
