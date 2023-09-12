@@ -127,7 +127,7 @@ public class GoogleNavigationView extends FrameLayout {
         mNavigator.removeRemainingTimeOrDistanceChangedListener(remainingTimeOrDistanceChangedListener);
       }
 
-      mNavigator.getSimulator().unsetUserLocation();
+      //mNavigator.getSimulator().unsetUserLocation();
       mNavigator.cleanup();
     }
   }
@@ -242,7 +242,7 @@ public class GoogleNavigationView extends FrameLayout {
               mNavigator.stopGuidance();
 
               // Stop simulating vehicle movement.
-              mNavigator.getSimulator().unsetUserLocation();
+              //mNavigator.getSimulator().unsetUserLocation();
 
               // send event
               sendArrivalEvent();
@@ -274,7 +274,7 @@ public class GoogleNavigationView extends FrameLayout {
               // Audio guidance
               mNavigator.setAudioGuidance(Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE);
 
-              mNavigator.getSimulator().simulateLocationsAlongExistingRoute();
+              //mNavigator.getSimulator().simulateLocationsAlongExistingRoute();
 
               mNavigator.startGuidance();
             }

@@ -228,7 +228,7 @@ class GoogleNavigationView : UIView {
                             switch routeStatus {
                             case .OK:
                                 self.gmsMapView?.navigator?.isGuidanceActive = true
-                                self.gmsMapView?.locationSimulator?.simulateLocationsAlongExistingRoute()
+                                //self.gmsMapView?.locationSimulator?.simulateLocationsAlongExistingRoute()
                                 self.gmsMapView?.cameraMode = .following
                                 break
                             default:
@@ -249,6 +249,7 @@ extension GoogleNavigationView: GMSNavigatorListener {
 
     func navigator(_ navigator: GMSNavigator, didArriveAt waypoint: GMSNavigationWaypoint) {
         self.reactOnDidArrive?(nil)
+        //self.gmsMapView?.locationSimulator?.stopSimulation()
     }
 
     func navigator(_ navigator: GMSNavigator, didUpdate navInfo: GMSNavigationNavInfo) {
