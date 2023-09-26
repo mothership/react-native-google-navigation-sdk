@@ -10,6 +10,7 @@ RCT_REMAP_VIEW_PROPERTY(toLongitude, reactToLongitude, double)
 
 RCT_REMAP_VIEW_PROPERTY(onShowResumeButton, reactOnShowResumeButton, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onDidArrive, reactOnDidArrive, RCTBubblingEventBlock)
+RCT_REMAP_VIEW_PROPERTY(onDidLoadRoute, reactOnDidLoadRoute, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onUpdateNavigationInfo, reactOnUpdateNavigationInfo, RCTBubblingEventBlock)
 
 RCT_EXTERN_METHOD(setVoiceMuted:(nonnull NSNumber *)reactTag

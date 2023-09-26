@@ -64,6 +64,7 @@ class GoogleNavigationView : UIView {
 
     var reactOnShowResumeButton : RCTBubblingEventBlock?
     var reactOnDidArrive : RCTBubblingEventBlock?
+    var reactOnDidLoadRoute : RCTBubblingEventBlock?
     var reactOnUpdateNavigationInfo : RCTBubblingEventBlock?
 
     var reactFromLatitude : Double = 0
@@ -133,11 +134,17 @@ class GoogleNavigationView : UIView {
         //            "showResumeButton": false
         //        ])
     }
-
+    
     @objc func setReactOnDidArrive(_ value: @escaping RCTBubblingEventBlock) {
         self.reactOnDidArrive = value
         // Call it like this
         //        self.reactOnDidArrive?()
+    }
+    
+    @objc func setReactOnDidLoadRoute(_ value: @escaping RCTBubblingEventBlock) {
+        self.reactOnDidLoadRoute = value
+        // Call it like this
+        //        self.reactOnDidLoadRoute?()
     }
 
     @objc func setReactOnUpdateNavigationInfo(_ value: @escaping RCTBubblingEventBlock) {
@@ -227,6 +234,7 @@ class GoogleNavigationView : UIView {
                         self.gmsMapView?.navigator?.setDestinations(destinations) { routeStatus in
                             switch routeStatus {
                             case .OK:
+                                self.reactOnDidLoadRoute?(nil)
                                 self.gmsMapView?.navigator?.isGuidanceActive = true
                                 //self.gmsMapView?.locationSimulator?.simulateLocationsAlongExistingRoute()
                                 self.gmsMapView?.cameraMode = .following

@@ -155,6 +155,13 @@ public class GoogleNavigationView extends FrameLayout {
       .receiveEvent(getId(), "didArrive", event);
   }
 
+  private void sendLoadRouteEvent() {
+    WritableMap event = Arguments.createMap();
+    mReactContext
+      .getJSModule(RCTEventEmitter.class)
+      .receiveEvent(getId(), "didLoadRoute", event);
+  }
+
   private void sendCurrentNavigationInfo() {
     WritableMap event = Arguments.createMap();
     event.putDouble("distanceRemaining", (double)mNavigator.getCurrentTimeAndDistance().getMeters());
@@ -271,6 +278,9 @@ public class GoogleNavigationView extends FrameLayout {
           @Override
           public void onResult(Navigator.RouteStatus routeStatus) {
             if (routeStatus == Navigator.RouteStatus.OK) {
+              // send event
+              sendLoadRouteEvent();
+
               // Audio guidance
               mNavigator.setAudioGuidance(Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE);
 

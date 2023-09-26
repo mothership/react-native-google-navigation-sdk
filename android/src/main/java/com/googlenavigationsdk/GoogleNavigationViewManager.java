@@ -49,6 +49,11 @@ public class GoogleNavigationViewManager extends SimpleViewManager<GoogleNavigat
         "phasedRegistrationNames",
         MapBuilder.of("bubbled", "onDidArrive", "captured", "onDidArriveCapture")
       )).put(
+      "didLoadRoute",
+      MapBuilder.of(
+        "phasedRegistrationNames",
+        MapBuilder.of("bubbled", "onDidLoadRoute", "captured", "onDidLoadRouteCapture")
+      )).put(
       "updateNavigationInfo",
       MapBuilder.of(
         "phasedRegistrationNames",
