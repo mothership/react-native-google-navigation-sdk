@@ -175,6 +175,7 @@ type GoogleNavigationViewProps = {
   // Callbacks
   onShowResumeButton?: (showResumeButton: boolean) => void;
   onDidArrive?: () => void;
+  onDidLoadRoute?: () => void;
   onUpdateNavigationInfo?: (
     distanceRemaining: number,
     durationRemaining: number
@@ -239,6 +240,14 @@ export const NavigationView = forwardRef(
       props.onDidArrive();
     };
 
+    const _onDidLoadRoute = (_: { nativeEvent: {} }) => {
+      if (!props.onDidLoadRoute) {
+        return;
+      }
+      // process raw event...
+      props.onDidLoadRoute();
+    };
+
     // Exposed public functions
     const setVoiceMuted = (muted: boolean): void => {
       NativeModules.GoogleNavigationView.setVoiceMuted(
@@ -270,6 +279,7 @@ export const NavigationView = forwardRef(
         onUpdateNavigationInfo={_onUpdateNavigationInfo}
         // @ts-ignore
         onDidArrive={_onDidArrive}
+        onDidLoadRoute={_onDidLoadRoute}
       />
     );
   }
