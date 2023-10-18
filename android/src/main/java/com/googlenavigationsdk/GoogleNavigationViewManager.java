@@ -87,6 +87,36 @@ public class GoogleNavigationViewManager extends SimpleViewManager<GoogleNavigat
     view.setToLongitude(toLongitude);
   }
 
+  @ReactProp(name = "showTripProgressBar")
+  public void setShowTripProgressBar(GoogleNavigationView view, int showTripProgressBar) {
+    view.setShowTripProgressBar(showTripProgressBar);
+  }
+
+  @ReactProp(name = "showCompassButton")
+  public void setShowCompassButton(GoogleNavigationView view, int showCompassButton) {
+    view.setShowCompassButton(showCompassButton);
+  }
+
+  @ReactProp(name = "showTrafficLights")
+  public void setShowTrafficLights(GoogleNavigationView view, int showTrafficLights) {
+    view.setShowTrafficLights(showTrafficLights);
+  }
+
+  @ReactProp(name = "showStopSigns")
+  public void setShowStopSigns(GoogleNavigationView view, int showStopSigns) {
+    view.setShowStopSigns(showStopSigns);
+  }
+
+  @ReactProp(name = "showSpeedometer")
+  public void setShowSpeedometer(GoogleNavigationView view, int showSpeedometer) {
+    view.setShowSpeedometer(showSpeedometer);
+  }
+
+  @ReactProp(name = "showSpeedLimit")
+  public void setShowSpeedLimit(GoogleNavigationView view, int showSpeedLimit) {
+    view.setShowSpeedLimit(showSpeedLimit);
+  }
+
   @ReactMethod
   public void setVoiceMuted(int reactTag, boolean voiceMuted, Promise promise) {
     UiThreadUtil.runOnUiThread(new Runnable() {

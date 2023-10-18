@@ -71,6 +71,13 @@ class GoogleNavigationView : UIView {
     var reactFromLongitude : Double = 0
     var reactToLatitude : Double = 0
     var reactToLongitude : Double = 0
+    
+    var reactShowTripProgressBar : Int = 0
+    var reactShowCompassButton : Int = 0
+    var reactShowTrafficLights : Int = 0
+    var reactShowStopSigns : Int = 0
+    var reactShowSpeedometer : Int = 0
+    var reactShowSpeedLimit : Int = 0
 
     var navigationAlreadyStarted: Bool = false
 
@@ -91,6 +98,8 @@ class GoogleNavigationView : UIView {
         self.addSubview(mapView)
 
     }
+    
+    // React Frame
 
     override func reactSetFrame(_ frame: CGRect) {
         self.gmsMapView?.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
@@ -126,6 +135,36 @@ class GoogleNavigationView : UIView {
         reactToLongitude = value
         startNavigationIfAllCoordinatesSet()
     }
+    
+    @objc func setReactShowTripProgressBar(_ value: Int) {
+        reactShowTripProgressBar = value
+        self.gmsMapView?.settings.isNavigationTripProgressBarEnabled = value != 0
+    }
+    
+    @objc func setReactShowCompassButton(_ value: Int) {
+        reactShowCompassButton = value
+        self.gmsMapView?.settings.compassButton = value != 0
+    }
+    
+    @objc func setReactShowTrafficLights(_ value: Int) {
+        reactShowTrafficLights = value
+        self.gmsMapView?.settings.showsTrafficLights = value != 0
+    }
+    
+    @objc func setReactShowStopSigns(_ value: Int) {
+        reactShowStopSigns = value
+        self.gmsMapView?.settings.showsStopSigns = value != 0
+    }
+    
+    @objc func setReactShowSpeedometer(_ value: Int) {
+        reactShowSpeedometer = value
+        self.gmsMapView?.shouldDisplaySpeedometer = value != 0
+    }
+    
+    @objc func setReactShowSpeedLimit(_ value: Int) {
+        reactShowSpeedLimit = value
+        self.gmsMapView?.shouldDisplaySpeedLimit = value != 0
+    }
 
     @objc func setReactOnShowResumeButton(_ value: @escaping RCTBubblingEventBlock) {
         self.reactOnShowResumeButton = value
@@ -134,13 +173,13 @@ class GoogleNavigationView : UIView {
         //            "showResumeButton": false
         //        ])
     }
-    
+
     @objc func setReactOnDidArrive(_ value: @escaping RCTBubblingEventBlock) {
         self.reactOnDidArrive = value
         // Call it like this
         //        self.reactOnDidArrive?()
     }
-    
+
     @objc func setReactOnDidLoadRoute(_ value: @escaping RCTBubblingEventBlock) {
         self.reactOnDidLoadRoute = value
         // Call it like this
@@ -191,19 +230,19 @@ class GoogleNavigationView : UIView {
                         // Enable navigation if the user accepts the terms.
                         self.gmsMapView?.isNavigationEnabled = true
                         self.gmsMapView?.isTrafficEnabled = true
-                        self.gmsMapView?.shouldDisplaySpeedLimit = true
+                        self.gmsMapView?.shouldDisplaySpeedLimit = self.reactShowSpeedLimit != 0
                         self.gmsMapView?.travelMode = .driving
-                        self.gmsMapView?.shouldDisplaySpeedometer = true
+                        self.gmsMapView?.shouldDisplaySpeedometer = self.reactShowSpeedometer != 0
 
                         // UI Settings
-                        self.gmsMapView?.settings.compassButton = true
+                        self.gmsMapView?.settings.compassButton = self.reactShowCompassButton != 0
                         self.gmsMapView?.settings.isRecenterButtonEnabled = false
-                        self.gmsMapView?.settings.isNavigationTripProgressBarEnabled = true
+                        self.gmsMapView?.settings.isNavigationTripProgressBarEnabled = self.reactShowTripProgressBar != 0
                         self.gmsMapView?.settings.navigationHeaderPrimaryBackgroundColor = UIColor.black
                         self.gmsMapView?.settings.navigationHeaderSecondaryBackgroundColor = UIColor.black
                         self.gmsMapView?.settings.isNavigationFooterEnabled = false
-                        self.gmsMapView?.settings.showsTrafficLights = true
-                        self.gmsMapView?.settings.showsStopSigns = true
+                        self.gmsMapView?.settings.showsTrafficLights = self.reactShowTrafficLights != 0
+                        self.gmsMapView?.settings.showsStopSigns = self.reactShowStopSigns != 0
 
                         // Configure SpeedAlertOptions
                         let minorSpeedAlertThresholdPercentage: CGFloat = 0.05

@@ -172,6 +172,13 @@ type GoogleNavigationViewProps = {
   // Locations
   from?: [number, number];
   to?: [number, number];
+  // UI settings
+  showTripProgressBar?: boolean;
+  showCompassButton?: boolean;
+  showTrafficLights?: boolean;
+  showStopSigns?: boolean;
+  showSpeedometer?: boolean;
+  showSpeedLimit?: boolean;
   // Callbacks
   onShowResumeButton?: (showResumeButton: boolean) => void;
   onDidArrive?: () => void;
@@ -273,12 +280,31 @@ export const NavigationView = forwardRef(
         fromLongitude={props.from ? props.from[1] : 0}
         toLatitude={props.to ? props.to[0] : 0}
         toLongitude={props.to ? props.to[1] : 0}
+        showTripProgressBar={
+          props.showTripProgressBar === undefined ? true : props.showTripProgressBar
+        }
+        showCompassButton={
+          props.showCompassButton === undefined ? true : props.showCompassButton
+        }
+        showTrafficLights={
+          props.showTrafficLights === undefined ? true : props.showTrafficLights
+        }
+        showStopSigns={
+          props.showStopSigns === undefined ? true : props.showStopSigns
+        }
+        showSpeedometer={
+          props.showSpeedometer === undefined ? true : props.showSpeedometer
+        }
+        showSpeedLimit={
+          props.showSpeedLimit === undefined ? true : props.showSpeedLimit
+        }
         // @ts-ignore
         onShowResumeButton={_onShowResumeButton}
         // @ts-ignore
         onUpdateNavigationInfo={_onUpdateNavigationInfo}
         // @ts-ignore
         onDidArrive={_onDidArrive}
+        // @ts-ignore
         onDidLoadRoute={_onDidLoadRoute}
       />
     );

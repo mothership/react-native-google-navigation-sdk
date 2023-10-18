@@ -50,6 +50,12 @@ public class GoogleNavigationView extends FrameLayout {
   private double fromLongitude = 0;
   private double toLatitude = 0;
   private double toLongitude = 0;
+  private int showTripProgressBar = 0;
+  private int showCompassButton = 0;
+  private int showTrafficLights = 0;
+  private int showStopSigns = 0;
+  private int showSpeedometer = 0;
+  private int showSpeedLimit = 0;
   private boolean navigationAlreadyAdded = false;
   private boolean navigationAlreadyStarted = false;
   private int audioGuidance = Navigator.AudioGuidance.VOICE_ALERTS_AND_GUIDANCE;
@@ -86,6 +92,30 @@ public class GoogleNavigationView extends FrameLayout {
 
   public void setToLongitude(double toLongitude) {
     this.toLongitude = toLongitude;
+  }
+
+  public void setShowTripProgressBar(int showTripProgressBar) {
+    this.showTripProgressBar = showTripProgressBar;
+  }
+
+  public void setShowCompassButton(int showCompassButton) {
+    this.showCompassButton = showCompassButton;
+  }
+
+  public void setShowTrafficLights(int showTrafficLights) {
+    this.showTrafficLights = showTrafficLights;
+  }
+
+  public void setShowStopSigns(int showStopSigns) {
+    this.showStopSigns = showStopSigns;
+  }
+
+  public void setShowSpeedometer(int showSpeedometer) {
+    this.showSpeedometer = showSpeedometer;
+  }
+
+  public void setShowSpeedLimit(int showSpeedLimit) {
+    this.showSpeedLimit = showSpeedLimit;
   }
 
   public void setVoiceMuted(boolean voiceMuted) {
@@ -198,6 +228,7 @@ public class GoogleNavigationView extends FrameLayout {
           public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
             googleMap.setTrafficEnabled(true);
+            googleMap.getUiSettings().setCompassEnabled(showCompassButton);
             googleMap.followMyLocation(GoogleMap.CameraPerspective.TILTED);
             googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
                 @Override
@@ -215,9 +246,9 @@ public class GoogleNavigationView extends FrameLayout {
         navigationView.setHeaderEnabled(true);
         navigationView.setEtaCardEnabled(false);
         navigationView.setRecenterButtonEnabled(false);
-        navigationView.setSpeedLimitIconEnabled(false);
-        navigationView.setSpeedometerEnabled(true);
-        navigationView.setTripProgressBarEnabled(true);
+        navigationView.setSpeedLimitIconEnabled(showSpeedLimit);
+        navigationView.setSpeedometerEnabled(showSpeedometer);
+        navigationView.setTripProgressBarEnabled(showTripProgressBar);
 //        navigationView.setTrafficIncidentCardsEnabled(true);
 //        navigationView.setTrafficPromptsEnabled(true);
         navigationView.setForceNightMode(ForceNightMode.FORCE_DAY);
@@ -268,7 +299,7 @@ public class GoogleNavigationView extends FrameLayout {
         mRoutingOptions = mRoutingOptions.travelMode(RoutingOptions.TravelMode.DRIVING);
 
         mDisplayOptions =
-          new DisplayOptions().showTrafficLights(true).showStopSigns(true);
+          new DisplayOptions().showTrafficLights(showTrafficLights).showStopSigns(showStopSigns);
 
         // Navigate to the location
         ListenableResultFuture<Navigator.RouteStatus> result = mNavigator.setDestination(Waypoint.builder().setLatLng(

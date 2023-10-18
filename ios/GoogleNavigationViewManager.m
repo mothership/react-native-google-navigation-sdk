@@ -8,6 +8,13 @@ RCT_REMAP_VIEW_PROPERTY(fromLongitude, reactFromLongitude, double)
 RCT_REMAP_VIEW_PROPERTY(toLatitude, reactToLatitude, double)
 RCT_REMAP_VIEW_PROPERTY(toLongitude, reactToLongitude, double)
 
+RCT_REMAP_VIEW_PROPERTY(showTripProgressBar, reactShowTripProgressBar, int)
+RCT_REMAP_VIEW_PROPERTY(showCompassButton, reactShowCompassButton, int)
+RCT_REMAP_VIEW_PROPERTY(showTrafficLights, reactShowTrafficLights, int)
+RCT_REMAP_VIEW_PROPERTY(showStopSigns, reactShowStopSigns, int)
+RCT_REMAP_VIEW_PROPERTY(showSpeedometer, reactShowSpeedometer, int)
+RCT_REMAP_VIEW_PROPERTY(showSpeedLimit, reactShowSpeedLimit, int)
+
 RCT_REMAP_VIEW_PROPERTY(onShowResumeButton, reactOnShowResumeButton, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onDidArrive, reactOnDidArrive, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onDidLoadRoute, reactOnDidLoadRoute, RCTBubblingEventBlock)
