@@ -228,7 +228,7 @@ public class GoogleNavigationView extends FrameLayout {
           public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
             googleMap.setTrafficEnabled(true);
-            googleMap.getUiSettings().setCompassEnabled(showCompassButton);
+            googleMap.getUiSettings().setCompassEnabled(showCompassButton != 0);
             googleMap.followMyLocation(GoogleMap.CameraPerspective.TILTED);
             googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
                 @Override
@@ -246,9 +246,9 @@ public class GoogleNavigationView extends FrameLayout {
         navigationView.setHeaderEnabled(true);
         navigationView.setEtaCardEnabled(false);
         navigationView.setRecenterButtonEnabled(false);
-        navigationView.setSpeedLimitIconEnabled(showSpeedLimit);
-        navigationView.setSpeedometerEnabled(showSpeedometer);
-        navigationView.setTripProgressBarEnabled(showTripProgressBar);
+        navigationView.setSpeedLimitIconEnabled(showSpeedLimit != 0);
+        navigationView.setSpeedometerEnabled(showSpeedometer != 0);
+        navigationView.setTripProgressBarEnabled(showTripProgressBar != 0);
 //        navigationView.setTrafficIncidentCardsEnabled(true);
 //        navigationView.setTrafficPromptsEnabled(true);
         navigationView.setForceNightMode(ForceNightMode.FORCE_DAY);
@@ -299,7 +299,7 @@ public class GoogleNavigationView extends FrameLayout {
         mRoutingOptions = mRoutingOptions.travelMode(RoutingOptions.TravelMode.DRIVING);
 
         mDisplayOptions =
-          new DisplayOptions().showTrafficLights(showTrafficLights).showStopSigns(showStopSigns);
+          new DisplayOptions().showTrafficLights(showTrafficLights != 0).showStopSigns(showStopSigns != 0);
 
         // Navigate to the location
         ListenableResultFuture<Navigator.RouteStatus> result = mNavigator.setDestination(Waypoint.builder().setLatLng(
