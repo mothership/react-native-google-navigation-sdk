@@ -12,7 +12,8 @@ export type GoogleNavigationOnUpdateNavigationInfoEvent = {
 type GoogleNavigationViewProps = {
     style?: ViewStyle;
     from?: [number, number];
-    to?: [number, number];
+    toCoordinate?: [number, number];
+    toPlaceId?: string;
     showTripProgressBar?: boolean;
     showCompassButton?: boolean;
     showTrafficLights?: boolean;

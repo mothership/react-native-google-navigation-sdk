@@ -87,6 +87,11 @@ public class GoogleNavigationViewManager extends SimpleViewManager<GoogleNavigat
     view.setToLongitude(toLongitude);
   }
 
+  @ReactProp(name = "toPlaceId")
+  public void setToPlaceId(GoogleNavigationView view, String toPlaceId) {
+    view.setToPlaceId(toPlaceId);
+  }
+
   @ReactProp(name = "showTripProgressBar")
   public void setShowTripProgressBar(GoogleNavigationView view, int showTripProgressBar) {
     view.setShowTripProgressBar(showTripProgressBar);

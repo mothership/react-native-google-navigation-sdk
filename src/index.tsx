@@ -171,7 +171,8 @@ type GoogleNavigationViewProps = {
   style?: ViewStyle;
   // Locations
   from?: [number, number];
-  to?: [number, number];
+  toCoordinate?: [number, number];
+  toPlaceId?: string;
   // UI settings
   showTripProgressBar?: boolean;
   showCompassButton?: boolean;
@@ -278,8 +279,9 @@ export const NavigationView = forwardRef(
         style={props.style}
         fromLatitude={props.from ? props.from[0] : 0}
         fromLongitude={props.from ? props.from[1] : 0}
-        toLatitude={props.to ? props.to[0] : 0}
-        toLongitude={props.to ? props.to[1] : 0}
+        toLatitude={props.toCoordinate ? props.toCoordinate[0] : 0}
+        toLongitude={props.toCoordinate ? props.toCoordinate[1] : 0}
+        toPlaceId={props.toPlaceId}
         showTripProgressBar={
           props.showTripProgressBar === undefined ? true : props.showTripProgressBar
         }

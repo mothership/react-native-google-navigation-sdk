@@ -7,6 +7,7 @@ RCT_REMAP_VIEW_PROPERTY(fromLatitude, reactFromLatitude, double)
 RCT_REMAP_VIEW_PROPERTY(fromLongitude, reactFromLongitude, double)
 RCT_REMAP_VIEW_PROPERTY(toLatitude, reactToLatitude, double)
 RCT_REMAP_VIEW_PROPERTY(toLongitude, reactToLongitude, double)
+RCT_REMAP_VIEW_PROPERTY(toPlaceId, reactToPlaceId, NSString)
 
 RCT_REMAP_VIEW_PROPERTY(showTripProgressBar, reactShowTripProgressBar, int)
 RCT_REMAP_VIEW_PROPERTY(showCompassButton, reactShowCompassButton, int)

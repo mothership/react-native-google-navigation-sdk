@@ -71,6 +71,7 @@ class GoogleNavigationView : UIView {
     var reactFromLongitude : Double = 0
     var reactToLatitude : Double = 0
     var reactToLongitude : Double = 0
+    var reactToPlaceId : String? = nil
     
     var reactShowTripProgressBar : Int = 0
     var reactShowCompassButton : Int = 0
@@ -113,27 +114,35 @@ class GoogleNavigationView : UIView {
             self.gmsMapView?.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         }
     }
+    
+    // Was added to superview
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        startNavigationIfAllCoordinatesSet()
+    }
 
     // Properties
 
     @objc func setReactFromLatitude(_ value: Double) {
         reactFromLatitude = value
-        startNavigationIfAllCoordinatesSet()
     }
 
     @objc func setReactFromLongitude(_ value: Double) {
         reactFromLongitude = value
-        startNavigationIfAllCoordinatesSet()
     }
 
     @objc func setReactToLatitude(_ value: Double) {
         reactToLatitude = value
-        startNavigationIfAllCoordinatesSet()
     }
-
+    
     @objc func setReactToLongitude(_ value: Double) {
         reactToLongitude = value
-        startNavigationIfAllCoordinatesSet()
+    }
+    
+    @objc func setReactToPlaceId(_ value: String?) {
+        reactToPlaceId = value
     }
     
     @objc func setReactShowTripProgressBar(_ value: Int) {
@@ -218,8 +227,7 @@ class GoogleNavigationView : UIView {
     // Helpers
 
     private func startNavigationIfAllCoordinatesSet() {
-        print("Lat \(self.reactFromLatitude) Lng \(self.reactFromLongitude) Lat \(self.reactToLatitude) Lng \(self.reactToLongitude)")
-        if (!self.navigationAlreadyStarted && self.reactFromLatitude != 0 && self.reactFromLongitude != 0 && self.reactToLatitude != 0 && self.reactToLongitude != 0) {
+        if (!self.navigationAlreadyStarted && self.reactFromLatitude != 0 && self.reactFromLongitude != 0 && ((self.reactToLatitude != 0 && self.reactToLongitude != 0) || self.reactToPlaceId != nil)) {
             self.navigationAlreadyStarted = true
 
             let camera = GMSCameraPosition.camera(withLatitude: reactFromLatitude, longitude: reactFromLongitude, zoom: 14)
@@ -264,11 +272,14 @@ class GoogleNavigationView : UIView {
                         // in supported countries. (optional)
 //                        self.gmsMapView?.navigator?.licensePlateRestriction = GMSNavigationLicensePlateRestriction(licensePlateLastDigit: 12, countryCode: "US")
 
-
                         // Setup destination
                         var destinations = [GMSNavigationWaypoint]()
-                        destinations.append(GMSNavigationWaypoint(location: CLLocationCoordinate2D(latitude: self.reactToLatitude, longitude: self.reactToLongitude), title: "")!)
-
+                        if let placeId = self.reactToPlaceId {
+                            destinations.append(GMSNavigationWaypoint(placeID: placeId, title: "")!)
+                        } else {
+                            destinations.append(GMSNavigationWaypoint(location: CLLocationCoordinate2D(latitude: self.reactToLatitude, longitude: self.reactToLongitude), title: "")!)
+                        }
+                        
                         // Start navigation
                         self.gmsMapView?.navigator?.setDestinations(destinations) { routeStatus in
                             switch routeStatus {
