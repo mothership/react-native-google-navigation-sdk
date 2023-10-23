@@ -226,6 +226,27 @@ public class GoogleNavigationView extends FrameLayout {
       public void onNavigatorReady(Navigator navigator) {
         mNavigator = navigator;
 
+        // Create the waypoint and if it fails, return early
+        Waypoint waypoint = null;
+        boolean waypointCreated = false;
+        if (toPlaceId != null) {
+          try {
+            waypoint = Waypoint.builder().setPlaceIdString(
+                    toPlaceId
+                  ).build();
+            waypointCreated = true;
+          } catch(Exception e) {}
+        }
+        if (!waypointCreated && toLatitude != 0 && toLongitude != 0) {
+          waypoint = Waypoint.builder().setLatLng(
+                    toLatitude, toLongitude
+                  ).build();
+        }
+
+        if (waypoint == null) {
+          return;
+        }
+
         // Follow user
         navigationView.getMapAsync(new OnMapReadyCallback() {
           @SuppressLint("MissingPermission")
@@ -306,17 +327,7 @@ public class GoogleNavigationView extends FrameLayout {
         mDisplayOptions =
           new DisplayOptions().showTrafficLights(showTrafficLights != 0).showStopSigns(showStopSigns != 0);
 
-        // Navigate to the location
-        Waypoint waypoint;
-        if (toPlaceId != null) {
-          waypoint = Waypoint.builder().setPlaceIdString(
-                    toPlaceId
-                  ).build();
-        } else {
-          waypoint = Waypoint.builder().setLatLng(
-                    toLatitude, toLongitude
-                  ).build();
-        }
+        // Navigate to the waypoint
         ListenableResultFuture<Navigator.RouteStatus> result = mNavigator.setDestination(waypoint, mRoutingOptions, mDisplayOptions);
         result.setOnResultListener(new ListenableResultFuture.OnResultListener<Navigator.RouteStatus>() {
           @Override

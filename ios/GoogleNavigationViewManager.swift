@@ -72,7 +72,7 @@ class GoogleNavigationView : UIView {
     var reactToLatitude : Double = 0
     var reactToLongitude : Double = 0
     var reactToPlaceId : String? = nil
-    
+
     var reactShowTripProgressBar : Int = 0
     var reactShowCompassButton : Int = 0
     var reactShowTrafficLights : Int = 0
@@ -99,7 +99,7 @@ class GoogleNavigationView : UIView {
         self.addSubview(mapView)
 
     }
-    
+
     // React Frame
 
     override func reactSetFrame(_ frame: CGRect) {
@@ -114,12 +114,12 @@ class GoogleNavigationView : UIView {
             self.gmsMapView?.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         }
     }
-    
+
     // Was added to superview
-    
+
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        
+
         startNavigationIfAllCoordinatesSet()
     }
 
@@ -136,40 +136,40 @@ class GoogleNavigationView : UIView {
     @objc func setReactToLatitude(_ value: Double) {
         reactToLatitude = value
     }
-    
+
     @objc func setReactToLongitude(_ value: Double) {
         reactToLongitude = value
     }
-    
+
     @objc func setReactToPlaceId(_ value: String?) {
         reactToPlaceId = value
     }
-    
+
     @objc func setReactShowTripProgressBar(_ value: Int) {
         reactShowTripProgressBar = value
         self.gmsMapView?.settings.isNavigationTripProgressBarEnabled = value != 0
     }
-    
+
     @objc func setReactShowCompassButton(_ value: Int) {
         reactShowCompassButton = value
         self.gmsMapView?.settings.compassButton = value != 0
     }
-    
+
     @objc func setReactShowTrafficLights(_ value: Int) {
         reactShowTrafficLights = value
         self.gmsMapView?.settings.showsTrafficLights = value != 0
     }
-    
+
     @objc func setReactShowStopSigns(_ value: Int) {
         reactShowStopSigns = value
         self.gmsMapView?.settings.showsStopSigns = value != 0
     }
-    
+
     @objc func setReactShowSpeedometer(_ value: Int) {
         reactShowSpeedometer = value
         self.gmsMapView?.shouldDisplaySpeedometer = value != 0
     }
-    
+
     @objc func setReactShowSpeedLimit(_ value: Int) {
         reactShowSpeedLimit = value
         self.gmsMapView?.shouldDisplaySpeedLimit = value != 0
@@ -235,6 +235,17 @@ class GoogleNavigationView : UIView {
             GMSNavigationServices.showTermsAndConditionsDialogIfNeeded(
                 withCompanyName: "Mothership") { termsAccepted in
                     if termsAccepted {
+                        // Setup destination
+                        var destinations = [GMSNavigationWaypoint]()
+                        if let placeId = self.reactToPlaceId {
+                            destinations.append(GMSNavigationWaypoint(placeID: placeId, title: "")!)
+                        } else if self.reactToLatitude != 0 && self.reactToLongitude != 0 {
+                            destinations.append(GMSNavigationWaypoint(location: CLLocationCoordinate2D(latitude: self.reactToLatitude, longitude: self.reactToLongitude), title: "")!)
+                        }
+                        if destinations.count == 0 {
+                          return
+                        }
+
                         // Enable navigation if the user accepts the terms.
                         self.gmsMapView?.isNavigationEnabled = true
                         self.gmsMapView?.isTrafficEnabled = true
@@ -268,24 +279,13 @@ class GoogleNavigationView : UIView {
                         self.gmsMapView?.navigator?.distanceUpdateThreshold = 100
                         self.gmsMapView?.navigator?.add(self)
 
-                        // Set the last digit of the car's license plate to get route restrictions
-                        // in supported countries. (optional)
-//                        self.gmsMapView?.navigator?.licensePlateRestriction = GMSNavigationLicensePlateRestriction(licensePlateLastDigit: 12, countryCode: "US")
-
-                        // Setup destination
-                        var destinations = [GMSNavigationWaypoint]()
-                        if let placeId = self.reactToPlaceId {
-                            destinations.append(GMSNavigationWaypoint(placeID: placeId, title: "")!)
-                        } else {
-                            destinations.append(GMSNavigationWaypoint(location: CLLocationCoordinate2D(latitude: self.reactToLatitude, longitude: self.reactToLongitude), title: "")!)
-                        }
-                        
                         // Start navigation
                         self.gmsMapView?.navigator?.setDestinations(destinations) { routeStatus in
                             switch routeStatus {
                             case .OK:
                                 self.reactOnDidLoadRoute?(nil)
                                 self.gmsMapView?.navigator?.isGuidanceActive = true
+                                // TODO: if you want to simulate navigation uncomment this line
                                 //self.gmsMapView?.locationSimulator?.simulateLocationsAlongExistingRoute()
                                 self.gmsMapView?.cameraMode = .following
                                 break
@@ -295,8 +295,6 @@ class GoogleNavigationView : UIView {
                             }
 
                         }
-                    } else {
-                        // Handle the case when the user rejects the terms and conditions.
                     }
                 }
         }
@@ -307,6 +305,7 @@ extension GoogleNavigationView: GMSNavigatorListener {
 
     func navigator(_ navigator: GMSNavigator, didArriveAt waypoint: GMSNavigationWaypoint) {
         self.reactOnDidArrive?(nil)
+        // TODO: if you want to simulate navigation uncomment this line
         //self.gmsMapView?.locationSimulator?.stopSimulation()
     }
 
@@ -316,13 +315,6 @@ extension GoogleNavigationView: GMSNavigatorListener {
             "durationRemaining": navInfo.timeToFinalDestinationSeconds,
         ])
     }
-
-    // Define a listener for suggested changes to lighting mode.
-//    func navigator(_ navigator: GMSNavigator, didChangeSuggestedLightingMode lightingMode:
-//        GMSNavigationLightingMode) {
-//        // Make the suggested change.
-//        self.gmsMapView?.lightingMode = lightingMode
-//    }
 }
 
 extension GoogleNavigationView: GMSMapViewDelegate {
